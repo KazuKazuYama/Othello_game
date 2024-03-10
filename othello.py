@@ -26,13 +26,14 @@ def mouse_press(e):
   
 
 board=[]
-check=[]
 
 for i in range(10):
   board.append([0,0,0,0,0,0,0,0,0,0])
-  check.append([0,0,0,0,0,0,0,0,0,0])
-
-
+  
+def init_false():
+  for y in range(10):
+    for x in range(10):
+      board[y][x]=False
 
 def init_board():
   for y in range(8):
@@ -64,6 +65,7 @@ def draw_board():
 
 def pos1(cursor_x,cursor_y,stone): #左
   cnt=0
+  
   for x in range(cursor_x-1,0,-1):
     if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
       cnt=cnt+1
@@ -101,6 +103,7 @@ def pos3(cursor_x,cursor_y,stone):  #上
       return False
 
 def pos4(cursor_x,cursor_y,stone):
+  
   cnt=0
   for y in range(cursor_y-1,0,-1): #下
     if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
@@ -194,8 +197,8 @@ def my_put_stone():
         board[cursor_y][cursor_x]=2
       draw_board()
       sound2()
-    if pos1(cursor_x,cursor_y,stone)==False and pos2(cursor_x,cursor_y,stone)==False and pos3(cursor_x,cursor_y,stone)==False and pos4(cursor_x,cursor_y,stone)==False and pos5(cursor_x,cursor_y,stone)==False and pos6(cursor_x,cursor_y,stone)==False and pos7(cursor_x,cursor_y,stone)==False and pos8(cursor_x,cursor_y,stone)==False:
-      sound5()
+    if pos5(cursor_x,cursor_y,stone)==False:
+      pass
     
 
 def com_put_stone():
@@ -240,7 +243,7 @@ def check_board(cursor_x,cursor_y,stone):
           break
       if board[cursor_y][x]==0 or board[cursor_y][x]==-1:
         break
-    
+ 
   if pos2(cursor_x,cursor_y,stone)==True:
     cnt=0   #右
     for x in range(cursor_x+1,10):
