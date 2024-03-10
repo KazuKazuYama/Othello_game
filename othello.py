@@ -4,7 +4,7 @@ import winsound
 
 KURO=1
 SIRO=2
-
+index=0
 
 cursor_x=0
 cursor_y=0
@@ -17,6 +17,8 @@ def mouse_move(e):
   global mouse_x,mouse_y
   mouse_x=e.x
   mouse_y=e.y
+  cvs.delete("INFO")
+  cvs.create_text(400,300,text=str(mouse_x)+str(mouse_y),fill="Black",font=("Times New Roman",70),tag="INFO")
 
 
 def mouse_press(e):
@@ -63,9 +65,9 @@ def draw_board():
 def pos1(cursor_x,cursor_y,stone): #左
   cnt=0
   for x in range(cursor_x-1,0,-1):
-    if board[cursor_y][x]==2 if stone==True else 1:
+    if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
       cnt=cnt+1
-    if board[cursor_y][x]==1 if stone==True else 2:
+    if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
       if cnt>0:
         return True
       else:
@@ -75,9 +77,9 @@ def pos1(cursor_x,cursor_y,stone): #左
 def pos2(cursor_x,cursor_y,stone): #右
   cnt=0
   for x in range(cursor_x+1,10):
-    if board[cursor_y][x]==2 if stone==True else 1:
+    if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
       cnt=cnt+1
-      if board[cursor_y][x]==1 if stone==True else 2:
+      if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
         if cnt>0:
             return True
         else:
@@ -88,9 +90,9 @@ def pos2(cursor_x,cursor_y,stone): #右
 def pos3(cursor_x,cursor_y,stone):  #上
   cnt=0
   for y in range(cursor_y+1,10):
-    if board[y][cursor_x]==2  if stone==True else 1:
+    if board[y][cursor_x]==2  if stone==True else board[y][cursor_x]==1:
       cnt=cnt+1
-    if board[y][cursor_x]==1 if stone==True else 2:
+    if board[y][cursor_x]==1 if stone==True else board[y][cursor_x]==2:
       if cnt>0:
         return True
       else:
@@ -101,9 +103,9 @@ def pos3(cursor_x,cursor_y,stone):  #上
 def pos4(cursor_x,cursor_y,stone):
   cnt=0
   for y in range(cursor_y-1,0,-1): #下
-    if board[y][cursor_x]==2 if stone==True else 1:
+    if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
       cnt=cnt+1
-    if board[y][cursor_x]==1 if stone==True else 2:
+    if board[y][cursor_x]==1 if stone==True else board[y][cursor_x]==2:
       if cnt>0:
         return True
       else:
@@ -118,9 +120,9 @@ def pos5(cursor_x,cursor_y,stone): #左上
   else:
     i_max=cursor_x
   for i in range(i_max-1):
-      if board[cursor_y-i][cursor_x-i]==2 if stone==True else 1:
+      if board[cursor_y-i][cursor_x-i]==2 if stone==True else board[cursor_y-i][cursor_x-i]==1:
         cnt=cnt+1
-      if board[cursor_y-i][cursor_x-i]==1 if stone==True else 2:
+      if board[cursor_y-i][cursor_x-i]==1 if stone==True else  board[cursor_y-i][cursor_x-i]==2:
         if cnt>0:
           return True
         else:
@@ -135,9 +137,9 @@ def pos6(cursor_x,cursor_y,stone): #右下
   else:
     i_max=8-cursor_x+1
   for i in range(i_max-1):
-      if board[cursor_y+i][cursor_x+i]==2 if stone==True else 1:
+      if board[cursor_y+i][cursor_x+i]==2 if stone==True else board[cursor_y+i][cursor_x+i]==1:
         cnt=cnt+1
-      if board[cursor_y+i][cursor_x+i]==1 if stone==True else 2:
+      if board[cursor_y+i][cursor_x+i]==1 if stone==True else board[cursor_y+i][cursor_x+i]==2:
         if cnt>0:
           return True
         else:
@@ -152,9 +154,9 @@ def pos7(cursor_x,cursor_y,stone): #左下
   else:
     i_max=cursor_x
   for i in range(i_max-1):
-      if board[cursor_y+i][cursor_x-i]==2 if stone==True else 1:
+      if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==21:
         cnt=cnt+1
-      if board[cursor_y+i][cursor_x-i]==1 if stone==True else 2:
+      if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==22:
         if cnt>0:
           return True
         else:
@@ -169,9 +171,9 @@ def pos8(cursor_x,cursor_y,stone): #右上
   else:
     i_max=8-cursor_x+1
   for i in range(0,i_max-1):
-    if board[cursor_y-i][cursor_x+i]==2 if stone==True else 1:
+    if board[cursor_y-i][cursor_x+i]==2 if stone==True else board[cursor_y-i][cursor_x+i]==1:
       cnt=cnt+1
-    if board[cursor_y-i][cursor_x+i]==1 if stone==True else 2:
+    if board[cursor_y-i][cursor_x+i]==1 if stone==True else board[cursor_y-i][cursor_x+i]==2:
       if cnt>0:
         return True
       else:
@@ -179,43 +181,61 @@ def pos8(cursor_x,cursor_y,stone): #右上
     if board[cursor_y-i][cursor_x+i]==0 or board[cursor_y-i][cursor_x+i]==-1:
       return False
     
+
+
+def my_put_stone():
+  global cursor_x,cursor_y,stone,mouse_c
+  if board[cursor_y][cursor_x]==0:
+    if pos1(cursor_x,cursor_y,stone)==True or pos2(cursor_x,cursor_y,stone)==True or pos3(cursor_x,cursor_y,stone)==True or pos4(cursor_x,cursor_y,stone)==True or pos5(cursor_x,cursor_y,stone)==True or pos6(cursor_x,cursor_y,stone)==True or pos7(cursor_x,cursor_y,stone)==True or pos8(cursor_x,cursor_y,stone)==True:
+      if stone==True:
+        board[cursor_y][cursor_x]=1
+      else:
+        board[cursor_y][cursor_x]=2
+      draw_board()
+      sound2()
+    if pos1(cursor_x,cursor_y,stone)==False and pos2(cursor_x,cursor_y,stone)==False and pos3(cursor_x,cursor_y,stone)==False and pos4(cursor_x,cursor_y,stone)==False and pos5(cursor_x,cursor_y,stone)==False and pos6(cursor_x,cursor_y,stone)==False and pos7(cursor_x,cursor_y,stone)==False and pos8(cursor_x,cursor_y,stone)==False:
+      sound5()
+
+def com_put_stone():
+  global c_x,c_y,stone,com_x,com_y,mouse_c
+  c_x=[]
+  c_y=[]
+
+  for y in range(1,9):
+    for x in range(1,9):
+      if pos1(x,y,stone)==True or pos2(x,y,stone)==True or pos3(x,y,stone)==True or pos4(x,y,stone)==True or pos5(x,y,stone)==True or pos6(x,y,stone)==True or pos7(x,y,stone)==True or pos8(x,y,stone)==True:
+        c_x.append(x)
+        c_y.append(y)
+      if pos1(x,y,stone)==False and pos2(x,y,stone)==False and pos3(x,y,stone)==False and pos4(x,y,stone)==False and pos5(x,y,stone)==False and pos6(x,y,stone)==False and pos7(x,y,stone)==False and pos8(x,y,stone)==False:
+        pass
       
-  
+  i=random.randint(0,len(c_x)-1)
+  com_x=c_x[i]
+  com_y=c_y[i]
+  if stone==True:
+    board[com_y][com_x]=2
+  else:
+    board[com_y][com_x]=1
+  check_board(com_x,com_y,stone)
+  draw_board()
+  sound2()
     
-  
-   
- 
-      
-
-  
-
-
-
-
-def put_stone():
-  global cursor_x,cursor_y
-  cursor_x=(mouse_x-185)//54.375+1
-  cursor_y=(mouse_y-80)//54.375+1
-  if mouse_c==1 and cursor_x>=0 and cursor_x<8 and cursor_y>=0 and cursor_y<8:
-    if board[cursor_y][cursor_x]==0:
-      if pos1(cursor_x,cursor_y,stone)==True or pos2(cursor_x,cursor_y,stone)==True or pos3(cursor_x,cursor_y,stone)==True or pos4(cursor_x,cursor_y,stone)==True or pos5(cursor_x,cursor_y,stone)==True or pos6(cursor_x,cursor_y,stone)==True or pos7(cursor_x,cursor_y,stone)==True or pos8(cursor_x,cursor_y,stone)==True:
-        board[cursor_y][cursor_x]=1 if stone==True else 2
-        draw_board()
-        sound2()
-
-def chaeck_board(cursor_x,cursor_y,stone):
+def check_board(cursor_x,cursor_y,stone):
   for y in range(8):
     for x in range(8):
       check[y][x]=board[y][x]
   if pos1(cursor_x,cursor_y,stone)==True:
     cnt=0   #左
     for x in range(cursor_x-1,0,-1):
-      if board[cursor_y][x]==2 if stone==True else 1:
+      if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
         cnt=cnt+1
-      if board[cursor_y][x]==1 if stone==True else 2:
+      if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y][cursor_x-i]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y][cursor_x-i]=1
+            else:
+              check[cursor_y][cursor_x-i]=2
           break
         else:
           break
@@ -225,12 +245,15 @@ def chaeck_board(cursor_x,cursor_y,stone):
   if pos2(cursor_x,cursor_y,stone)==True:
     cnt=0   #右
     for x in range(cursor_x+1,10):
-      if board[cursor_y][x]==2 if stone==True else 1:
+      if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
         cnt=cnt+1
-        if board[cursor_y][x]==1 if stone==True else 2:
+        if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
           if cnt>0:
             for i in range(cnt):
-              check[cursor_y][cursor_x+i]=1 if stone==True else 2
+              if stone==True:
+                check[cursor_y][cursor_x+i]=1
+              else:
+                check[cursor_y][cursor_x+i]=2
             break
           else:
             break
@@ -240,12 +263,16 @@ def chaeck_board(cursor_x,cursor_y,stone):
   if pos3(cursor_x,cursor_y,stone)==True:
     cnt=0   #上
     for y in range(cursor_y+1,10):
-      if board[y][cursor_x]==2 if stone==True else 1:
+      if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
         cnt=cnt+1
-      if board[y][cursor_x]==1 if stone==True else 2:
+      if board[y][cursor_x]==1 if stone==True else board[y][cursor_x]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y+i][cursor_x]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y+i][cursor_x]=1
+            else:
+              check[cursor_y+i][cursor_x]=2
+            
           break
         else:
           break
@@ -255,12 +282,15 @@ def chaeck_board(cursor_x,cursor_y,stone):
   if pos4(cursor_x,cursor_y,stone)==True:
     cnt=0   #下
     for y in range(cursor_y-1,0,-1):
-      if board[y][cursor_x]==2 if stone==True else 1:
+      if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
         cnt=cnt+1
-      if board[y][cursor_x]==1 if stone==True else 2:
+      if board[y][cursor_x]==1 if stone==True else board[y][cursor_x]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y-i][cursor_x]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y-i][cursor_x]=1
+            else:
+              check[cursor_y-i][cursor_x]=2
           break
         else:
           break
@@ -274,12 +304,15 @@ def chaeck_board(cursor_x,cursor_y,stone):
     else:
       i_max=cursor_x
     for i in range(i_max-1):
-      if board[cursor_y-i][cursor_x-i]==2 if stone==True else 1:
+      if board[cursor_y-i][cursor_x-i]==2 if stone==True else board[cursor_y-i][cursor_x-i]==1:
         cnt=cnt+1
-      if board[cursor_y-i][cursor_x-i]==1 if stone==True else 2:
+      if board[cursor_y-i][cursor_x-i]==1 if stone==True else board[cursor_y-i][cursor_x-i]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y-i][cursor_x-i]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y-i][cursor_x-i]=1
+            else:
+              check[cursor_y-i][cursor_x-i]=2
           break
         else:
           break
@@ -293,12 +326,15 @@ def chaeck_board(cursor_x,cursor_y,stone):
     else:
       i_max=8-cursor_x+1
     for i in range(i_max-1):
-      if board[cursor_y+i][cursor_x+i]==2 if stone==True else 1:
+      if board[cursor_y+i][cursor_x+i]==2 if stone==True else board[cursor_y+i][cursor_x+i]==1:
         cnt=cnt+1
-      if board[cursor_y+i][cursor_x+i]==1 if stone==True else 2:
+      if board[cursor_y+i][cursor_x+i]==1 if stone==True else board[cursor_y+i][cursor_x+i]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y+i][cursor_x+i]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y+i][cursor_x+i]=1
+            else:
+              check[cursor_y+i][cursor_x+i]=2
           break
         else:
           break
@@ -312,12 +348,15 @@ def chaeck_board(cursor_x,cursor_y,stone):
     else:
       i_max=cursor_x
     for i in range(i_max-1):
-      if board[cursor_y+i][cursor_x-i]==2 if stone==True else 1:
+      if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==1:
         cnt=cnt+1
-      if board[cursor_y+i][cursor_x-i]==1 if stone==True else 2:
+      if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y+i][cursor_x-i]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y+i][cursor_x-i]=1
+            else:
+              check[cursor_y+i][cursor_x-i]=2
           break
         else:
           break
@@ -331,12 +370,15 @@ def chaeck_board(cursor_x,cursor_y,stone):
     else:
       i_max=8-cursor_x+1
     for i in range(0,i_max-1):
-      if board[cursor_y-i][cursor_x+i]==2 if stone==True else 1:
+      if board[cursor_y-i][cursor_x+i]==2 if stone==True else board[cursor_y-i][cursor_x+i]==1:
         cnt=cnt+1
-      if board[cursor_y-i][cursor_x+i]==1 if stone==True else 2:
+      if board[cursor_y-i][cursor_x+i]==1 if stone==True else board[cursor_y-i][cursor_x+i]==2:
         if cnt>0:
           for i in range(cnt):
-            check[cursor_y-i][cursor_x+i]=1 if stone==True else 2
+            if stone==True:
+              check[cursor_y-i][cursor_x+i]=1
+            else:
+              check[cursor_y-i][cursor_x+i]=2
           break
         else:
           break
@@ -364,7 +406,7 @@ def sound3_happy(): #勝利時の音
   winsound.Beep(440,300)
   winsound.Beep(440,300)
   winsound.Beep(440,300)
-  winsound.Beep(392,200)
+  winsound.Beep(392,300)
   winsound.Beep(440,600)
   winsound.Beep(349,800)
 
@@ -378,6 +420,79 @@ def sound3_destiny(): #敗北時の音
   winsound.Beep(349,300)
   winsound.Beep(293,1000)  
 
+def sound4(): #引き分け時の音
+  winsound.Beep(392,300)
+  winsound.Beep(392,300)
+  winsound.Beep(392,300)
+  winsound.Beep(310,1000)
+  winsound.Beep(349,300)
+  winsound.Beep(349,300)
+  winsound.Beep(349,300)
+  winsound.Beep(293,1000)
+  
+def sound5(): #石を置けないときの音
+  winsound.Beep(261,100) 
+
+def main_game():
+  global index,stone,tmr,ban
+  global cursor_x,cursor_y,mouse_x,mouse_y,mouse_c
+  
+  if index==0:
+    cvs.create_text(400,300,text="オセロ対戦",fill="Black",font=("Times New Roman",70),tag="TITLE")
+    cvs.create_text(400,500,text="対局する",fill="Black",font=("Times New Roman",40),tag="TITLE")
+    if mouse_c==1 and 300<mouse_x and mouse_x<500 and 450<mouse_y and mouse_y<550:
+      mouse_c=0
+      index=1
+      
+  
+  elif index==1:
+    cvs.delete("TITLE")
+    cvs.create_text(200,300,text="先行(黒)",fill="Black",font=("Times New Roman",40),tag="SELECT")
+    cvs.create_text(600,300,text="後攻(白)",fill="Black",font=("Times New Roman",40),tag="SELECT")
+    if mouse_c==1 and 150<mouse_x and mouse_x<250 and 250<mouse_y and mouse_y<350:
+      mouse_c=0
+      index=2
+      ban=1
+       #先攻
+    if mouse_c==1 and 550<mouse_x and mouse_x<650 and 250<mouse_y and mouse_y<350:
+      mouse_c=0
+      index=2
+      ban=2
+       #後攻
+      
+    
+  elif index==2:
+    cvs.delete("SELECT")
+    cvs.create_image(400,300,image=bg)
+    init_board()
+    draw_board()
+    if ban==1:
+      index=3
+      tmr=0
+    if ban==2:
+      index=5
+      tmr=0
+    
+
+  elif index==3:
+    stone=True
+    tmr=tmr+1
+    if tmr==3:
+      cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+      if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
+        cursor_x=(mouse_x-185)//54.375+1
+        cursor_y=(mouse_y-80)//54.375+1
+        if mouse_c==1:
+          mouse_c=0
+          my_put_stone()
+          check_board(cursor_x,cursor_y,stone)
+          draw_board()
+          index=4
+          tmr=0
+    
+        
+  root.after(100,main_game)
+
 root=tk.Tk()
 
 root.title("オセロ対戦")
@@ -387,9 +502,6 @@ cvs.pack()
 root.bind("<Motion>",mouse_move)
 root.bind("<ButtonPress>",mouse_press)
 bg=tk.PhotoImage(file="board.png")
-cvs.create_image(400,300,image=bg)
-init_board()
-draw_board()
-sound3_destiny()
-root.after(100,)
+
+main_game()
 root.mainloop()
