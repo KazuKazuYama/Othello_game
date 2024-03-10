@@ -17,13 +17,13 @@ def mouse_move(e):
   global mouse_x,mouse_y
   mouse_x=e.x
   mouse_y=e.y
-  cvs.delete("INFO")
-  cvs.create_text(400,300,text=str(mouse_x)+str(mouse_y),fill="Black",font=("Times New Roman",70),tag="INFO")
+  
 
 
 def mouse_press(e):
   global mouse_c
   mouse_c=1
+  
 
 board=[]
 check=[]
@@ -185,6 +185,7 @@ def pos8(cursor_x,cursor_y,stone): #右上
 
 def my_put_stone():
   global cursor_x,cursor_y,stone,mouse_c
+  
   if board[cursor_y][cursor_x]==0:
     if pos1(cursor_x,cursor_y,stone)==True or pos2(cursor_x,cursor_y,stone)==True or pos3(cursor_x,cursor_y,stone)==True or pos4(cursor_x,cursor_y,stone)==True or pos5(cursor_x,cursor_y,stone)==True or pos6(cursor_x,cursor_y,stone)==True or pos7(cursor_x,cursor_y,stone)==True or pos8(cursor_x,cursor_y,stone)==True:
       if stone==True:
@@ -221,9 +222,6 @@ def com_put_stone():
   sound2()
     
 def check_board(cursor_x,cursor_y,stone):
-  for y in range(8):
-    for x in range(8):
-      check[y][x]=board[y][x]
   if pos1(cursor_x,cursor_y,stone)==True:
     cnt=0   #左
     for x in range(cursor_x-1,0,-1):
@@ -233,9 +231,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y][cursor_x-i]=1
+              board[cursor_y][cursor_x-i-1]=1
             else:
-              check[cursor_y][cursor_x-i]=2
+              board[cursor_y][cursor_x-i-1]=2
           break
         else:
           break
@@ -251,9 +249,9 @@ def check_board(cursor_x,cursor_y,stone):
           if cnt>0:
             for i in range(cnt):
               if stone==True:
-                check[cursor_y][cursor_x+i]=1
+                board[cursor_y][cursor_x+i+1]=1
               else:
-                check[cursor_y][cursor_x+i]=2
+                board[cursor_y][cursor_x+i+1]=2
             break
           else:
             break
@@ -269,9 +267,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y+i][cursor_x]=1
+              board[cursor_y+i][cursor_x]=1
             else:
-              check[cursor_y+i][cursor_x]=2
+              board[cursor_y+i][cursor_x]=2
             
           break
         else:
@@ -288,9 +286,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y-i][cursor_x]=1
+              board[cursor_y-i][cursor_x]=1
             else:
-              check[cursor_y-i][cursor_x]=2
+              board[cursor_y-i][cursor_x]=2
           break
         else:
           break
@@ -310,9 +308,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y-i][cursor_x-i]=1
+              board[cursor_y-i][cursor_x-i]=1
             else:
-              check[cursor_y-i][cursor_x-i]=2
+              board[cursor_y-i][cursor_x-i]=2
           break
         else:
           break
@@ -332,9 +330,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y+i][cursor_x+i]=1
+              board[cursor_y+i][cursor_x+i]=1
             else:
-              check[cursor_y+i][cursor_x+i]=2
+              board[cursor_y+i][cursor_x+i]=2
           break
         else:
           break
@@ -376,9 +374,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y-i][cursor_x+i]=1
+              board[cursor_y-i][cursor_x+i]=1
             else:
-              check[cursor_y-i][cursor_x+i]=2
+              board[cursor_y-i][cursor_x+i]=2
           break
         else:
           break
@@ -476,32 +474,36 @@ def main_game():
 
   elif index==3:
     stone=True
-    tmr=tmr+1
-    if tmr==3:
-      cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
-      if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
-        cursor_x=(mouse_x-185)//54.375+1
-        cursor_y=(mouse_y-80)//54.375+1
-        if mouse_c==1:
-          mouse_c=0
-          my_put_stone()
-          check_board(cursor_x,cursor_y,stone)
-          draw_board()
-          index=4
-          tmr=0
-    
-        
+    cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
+      cursor_x=int((mouse_x-185)/54.375)+1
+      cursor_y=int((mouse_y-80)/54.375)+1
+      print("a")
+      print(cursor_x,cursor_y)
+      if mouse_c==1:
+        mouse_c=0
+        print("aa")
+        print(pos1(cursor_x,cursor_y,stone))
+        my_put_stone()
+        if pos1(cursor_x,cursor_y,stone)==None and pos2(cursor_x,cursor_y,stone)==None and pos3(cursor_x,cursor_y,stone)==None and pos4(cursor_x,cursor_y,stone)==None and pos5(cursor_x,cursor_y,stone)==None and pos6(cursor_x,cursor_y,stone)==None and pos7(cursor_x,cursor_y,stone)==None and pos8(cursor_x,cursor_y,stone)==None:
+          index=3
+              
+        check_board(cursor_x,cursor_y,stone)
+        draw_board()
+        index=4
+        tmr=0
+          
+          
   root.after(100,main_game)
 
 root=tk.Tk()
-
 root.title("オセロ対戦")
 root.resizable(False,False)
-cvs=tk.Canvas(width=800,height=600)
-cvs.pack()
 root.bind("<Motion>",mouse_move)
 root.bind("<ButtonPress>",mouse_press)
 bg=tk.PhotoImage(file="board.png")
+cvs=tk.Canvas(width=800,height=600)
+cvs.pack()
 
 main_game()
 root.mainloop()
