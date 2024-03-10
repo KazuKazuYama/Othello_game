@@ -196,6 +196,7 @@ def my_put_stone():
       sound2()
     if pos1(cursor_x,cursor_y,stone)==False and pos2(cursor_x,cursor_y,stone)==False and pos3(cursor_x,cursor_y,stone)==False and pos4(cursor_x,cursor_y,stone)==False and pos5(cursor_x,cursor_y,stone)==False and pos6(cursor_x,cursor_y,stone)==False and pos7(cursor_x,cursor_y,stone)==False and pos8(cursor_x,cursor_y,stone)==False:
       sound5()
+    
 
 def com_put_stone():
   global c_x,c_y,stone,com_x,com_y,mouse_c
@@ -249,9 +250,9 @@ def check_board(cursor_x,cursor_y,stone):
           if cnt>0:
             for i in range(cnt):
               if stone==True:
-                board[cursor_y][cursor_x+i+1]=1
+                board[cursor_y][cursor_x+i-1]=1
               else:
-                board[cursor_y][cursor_x+i+1]=2
+                board[cursor_y][cursor_x+i-1]=2
             break
           else:
             break
@@ -267,9 +268,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y+i][cursor_x]=1
+              board[cursor_y+i-1][cursor_x]=1
             else:
-              board[cursor_y+i][cursor_x]=2
+              board[cursor_y+i-1][cursor_x]=2
             
           break
         else:
@@ -286,9 +287,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y-i][cursor_x]=1
+              board[cursor_y-i-1][cursor_x]=1
             else:
-              board[cursor_y-i][cursor_x]=2
+              board[cursor_y-i-1][cursor_x]=2
           break
         else:
           break
