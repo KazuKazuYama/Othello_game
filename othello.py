@@ -18,6 +18,7 @@ def mouse_move(e):
   global mouse_x,mouse_y
   mouse_x=e.x
   mouse_y=e.y
+  print(mouse_x,mouse_y)
   
 
 
@@ -218,6 +219,7 @@ def my_put_stone(): #自分の石を置く
     else:
       print("他の場所に置いてください")
       #カーソルを選び直す
+      return False
       
     
 
@@ -229,8 +231,9 @@ def com_put_stone(): #コンピュータの石を置く
   for y in range(1,9):
     for x in range(1,9):
       if pos1(x,y,stone)==True or pos2(x,y,stone)==True or pos3(x,y,stone)==True or pos4(x,y,stone)==True or pos5(x,y,stone)==True or pos6(x,y,stone)==True or pos7(x,y,stone)==True or pos8(x,y,stone)==True:
-        c_x.append(x)
-        c_y.append(y)
+        if board[y][x]==0:
+          c_x.append(x)
+          c_y.append(y)
       
   i=random.randint(0,len(c_x)-1)
   com_x=c_x[i]
@@ -497,7 +500,7 @@ def main_game():
   elif index==3: #先行の時の自分のターン
     stone=True
     cvs.delete("TURN")
-    cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    cvs.create_text(720,160,text="あなた",fill="Black",font=("Times New Roman",30),tag="TURN")
     if all_confirm(stone)==False:
         print("置ける場所がありません")
         pas=pas+1
@@ -514,9 +517,12 @@ def main_game():
         if mouse_c==1:
           mouse_c=0
           my_put_stone()
-          check_board(cursor_x,cursor_y,stone)
-          draw_board()
-          index=4
+          if my_put_stone()==False:
+            index=3
+          else:
+            check_board(cursor_x,cursor_y,stone)
+            draw_board()
+            index=4
     if pas==2:
        index=7
             
@@ -524,7 +530,7 @@ def main_game():
   elif index==4: #先行の時のコンピュータのターン
     stone=False
     cvs.delete("TURN")
-    cvs.create_text(400,300,text="コンピュータの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    cvs.create_text(720,160,text="CP",fill="Black",font=("Times New Roman",30),tag="TURN")
     if all_confirm(stone)==False:
         print("置ける場所がありません")
         pas=pas+1
@@ -543,7 +549,7 @@ def main_game():
   elif index==5: #後攻の時のコンピュータのターン
     stone=True
     cvs.delete("TURN")
-    cvs.create_text(400,300,text="コンピュータの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    cvs.create_text(720,160,text="CP",fill="Black",font=("Times New Roman",30),tag="TURN")
     if all_confirm(stone)==False:
         print("置ける場所がありません")
         pas=pas+1
@@ -562,7 +568,7 @@ def main_game():
   elif index==6: #後攻の時の自分のターン
     stone=False
     cvs.delete("TURN")
-    cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    cvs.create_text(720,160,text="あなた",fill="Black",font=("Times New Roman",30),tag="TURN")
     if all_confirm(stone)==False:
         print("置ける場所がありません")
         pas=pas+1
@@ -581,9 +587,13 @@ def main_game():
           print("aa")
           print(pos1(cursor_x,cursor_y,stone))
           my_put_stone()
-          check_board(cursor_x,cursor_y,stone)
-          draw_board()
-          index=5
+          if my_put_stone()==False:
+            index=6
+          else:
+            check_board(cursor_x,cursor_y,stone)
+            draw_board()
+            index=5
+          
     if pas==2:
       index=7
             
@@ -601,17 +611,17 @@ def main_game():
     cvs.create_text(400,400,text="黒:"+str(black_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
     if black_num>white_num:
       if ban==0:
-        cvs.create_text(400,300,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
+        cvs.create_text(400,100,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
         sound3_happy()
       if ban==1:
-        cvs.create_text(400,300,text="あなたの負けです",fill="Blue",font=("Times New Roman",40),tag="RESULT")
+        cvs.create_text(400,100,text="あなたの負けです",fill="Blue",font=("Times New Roman",40),tag="RESULT")
         sound3_destiny()   
     if black_num<white_num:
       if ban==0:
-        cvs.create_text(400,300,text="あなたの負けです",fill="Blue",font=("Times New Roman",40),tag="RESULT")
+        cvs.create_text(400,100,text="あなたの負けです",fill="Blue",font=("Times New Roman",40),tag="RESULT")
         sound3_destiny()
       if ban==1:
-        cvs.create_text(400,300,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
+        cvs.create_text(400,100,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
         sound3_happy() 
         
         

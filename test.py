@@ -8,6 +8,12 @@ board[4][4]=1
 board[4][5]=2
 board[5][4]=1
 board[5][5]=2
+board[6][6]=1
+board[6][7]=2
+board[7][6]=1
+board[7][7]=2
+board[3][3]=1
+board[3][4]=1
 board[cursor_y][cursor_x]=1
 for i in range(10):
   for j in range(10):
@@ -152,8 +158,9 @@ def com_put_stone(): #コンピュータの石を置く
   for y in range(1,9):
     for x in range(1,9):
       if pos1(x,y,stone)==True or pos2(x,y,stone)==True or pos3(x,y,stone)==True or pos4(x,y,stone)==True or pos5(x,y,stone)==True or pos6(x,y,stone)==True or pos7(x,y,stone)==True or pos8(x,y,stone)==True:
-        c_x.append(x)
-        c_y.append(y)
+        if board[y][x]==0:
+          c_x.append(x)
+          c_y.append(y)
        
   print(len(c_x))
   i=random.randint(0,len(c_x)-1)
