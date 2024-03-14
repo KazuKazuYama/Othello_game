@@ -130,7 +130,7 @@ def pos5(cursor_x,cursor_y,stone): #左上
     i_max=cursor_y
   else:
     i_max=cursor_x
-  for i in range(1,i_max-1):
+  for i in range(1,i_max):
       if board[cursor_y-i][cursor_x-i]==2 if stone==True else board[cursor_y-i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y-i][cursor_x-i]==1 if stone==True else  board[cursor_y-i][cursor_x-i]==2:
@@ -148,7 +148,7 @@ def pos6(cursor_x,cursor_y,stone): #右下
     i_max=8-cursor_y+1
   else:
     i_max=8-cursor_x+1
-  for i in range(1,i_max-1):
+  for i in range(1,i_max):
       if board[cursor_y+i][cursor_x+i]==2 if stone==True else board[cursor_y+i][cursor_x+i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x+i]==1 if stone==True else board[cursor_y+i][cursor_x+i]==2:
@@ -166,7 +166,7 @@ def pos7(cursor_x,cursor_y,stone): #左下
     i_max=8-cursor_y+1
   else:
     i_max=cursor_x
-  for i in range(1,i_max-1):
+  for i in range(1,i_max):
       if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==2:
@@ -184,7 +184,7 @@ def pos8(cursor_x,cursor_y,stone): #右上
     i_max=cursor_y
   else:
     i_max=8-cursor_x+1
-  for i in range(1,i_max-1):
+  for i in range(1,i_max):
     if board[cursor_y-i][cursor_x+i]==2 if stone==True else board[cursor_y-i][cursor_x+i]==1:
       cnt=cnt+1
     if board[cursor_y-i][cursor_x+i]==1 if stone==True else board[cursor_y-i][cursor_x+i]==2:
@@ -326,7 +326,7 @@ def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
       i_max=cursor_y
     else:
       i_max=cursor_x
-    for i in range(1,i_max-1):
+    for i in range(1,i_max):
       if board[cursor_y-i][cursor_x-i]==2 if stone==True else board[cursor_y-i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y-i][cursor_x-i]==1 if stone==True else board[cursor_y-i][cursor_x-i]==2:
@@ -348,7 +348,7 @@ def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
       i_max=8-cursor_y+1
     else:
       i_max=8-cursor_x+1
-    for i in range(1,i_max-1):
+    for i in range(1,i_max):
       if board[cursor_y+i][cursor_x+i]==2 if stone==True else board[cursor_y+i][cursor_x+i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x+i]==1 if stone==True else board[cursor_y+i][cursor_x+i]==2:
@@ -370,7 +370,7 @@ def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
       i_max=8-cursor_y+1
     else:
       i_max=cursor_x
-    for i in range(1,i_max-1):
+    for i in range(1,i_max):
       if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==2:
@@ -392,7 +392,7 @@ def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
       i_max=cursor_y
     else:
       i_max=8-cursor_x+1
-    for i in range(1,i_max-1):
+    for i in range(1,i_max):
       if board[cursor_y-i][cursor_x+i]==2 if stone==True else board[cursor_y-i][cursor_x+i]==1:
         cnt=cnt+1
       if board[cursor_y-i][cursor_x+i]==1 if stone==True else board[cursor_y-i][cursor_x+i]==2:
