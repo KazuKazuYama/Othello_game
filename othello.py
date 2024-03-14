@@ -11,7 +11,9 @@ cursor_y=0
 mouse_x=0
 mouse_y=0
 mouse_c=0
+pas=0
 stone=True #True:黒 False:白
+banstr=["あなた","コンピュータ"]
 
 def mouse_move(e):
   global mouse_x,mouse_y
@@ -26,6 +28,7 @@ def mouse_press(e):
   
 
 board=[]
+check=[]
 
 for i in range(10):
   board.append([0,0,0,0,0,0,0,0,0,0])
@@ -33,7 +36,7 @@ for i in range(10):
 def init_false():
   for y in range(10):
     for x in range(10):
-      board[y][x]=False
+      [y][x]=False
 
 def init_board():
   for y in range(8):
@@ -76,20 +79,23 @@ def pos1(cursor_x,cursor_y,stone): #左
         return False
     if board[cursor_y][x]==0 or board[cursor_y][x]==-1:
       return False
+  return False
+    
 def pos2(cursor_x,cursor_y,stone): #右
   cnt=0
   for x in range(cursor_x+1,10):
     if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
       cnt=cnt+1
-      if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
+    if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
         if cnt>0:
             return True
         else:
             return False
     if board[cursor_y][x]==0 or board[cursor_y][x]==-1:
       return False
+  return False
 
-def pos3(cursor_x,cursor_y,stone):  #上
+def pos3(cursor_x,cursor_y,stone):  #下
   cnt=0
   for y in range(cursor_y+1,10):
     if board[y][cursor_x]==2  if stone==True else board[y][cursor_x]==1:
@@ -101,11 +107,12 @@ def pos3(cursor_x,cursor_y,stone):  #上
         return False
     if board[y][cursor_x]==0 or board[y][cursor_x]==-1:
       return False
+  return False
 
 def pos4(cursor_x,cursor_y,stone):
   
   cnt=0
-  for y in range(cursor_y-1,0,-1): #下
+  for y in range(cursor_y-1,0,-1): #上
     if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
       cnt=cnt+1
     if board[y][cursor_x]==1 if stone==True else board[y][cursor_x]==2:
@@ -115,6 +122,7 @@ def pos4(cursor_x,cursor_y,stone):
         return False
     if board[y][cursor_x]==0 or board[y][cursor_x]==-1:
       return False
+  return False
   
 def pos5(cursor_x,cursor_y,stone): #左上
   cnt=0
@@ -122,7 +130,7 @@ def pos5(cursor_x,cursor_y,stone): #左上
     i_max=cursor_y
   else:
     i_max=cursor_x
-  for i in range(i_max-1):
+  for i in range(1,i_max-1):
       if board[cursor_y-i][cursor_x-i]==2 if stone==True else board[cursor_y-i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y-i][cursor_x-i]==1 if stone==True else  board[cursor_y-i][cursor_x-i]==2:
@@ -132,6 +140,7 @@ def pos5(cursor_x,cursor_y,stone): #左上
           return False
       if board[cursor_y-i][cursor_x-i]==0 or board[cursor_y-i][cursor_x-i]==-1:
         return False
+  return False
 
 def pos6(cursor_x,cursor_y,stone): #右下
   cnt=0
@@ -139,7 +148,7 @@ def pos6(cursor_x,cursor_y,stone): #右下
     i_max=8-cursor_y+1
   else:
     i_max=8-cursor_x+1
-  for i in range(i_max-1):
+  for i in range(1,i_max-1):
       if board[cursor_y+i][cursor_x+i]==2 if stone==True else board[cursor_y+i][cursor_x+i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x+i]==1 if stone==True else board[cursor_y+i][cursor_x+i]==2:
@@ -149,6 +158,7 @@ def pos6(cursor_x,cursor_y,stone): #右下
           return False
       if board[cursor_y+i][cursor_x+i]==0 or board[cursor_y+i][cursor_x+i]==-1:
         return False
+  return False
   
 def pos7(cursor_x,cursor_y,stone): #左下
   cnt=0
@@ -156,7 +166,7 @@ def pos7(cursor_x,cursor_y,stone): #左下
     i_max=8-cursor_y+1
   else:
     i_max=cursor_x
-  for i in range(i_max-1):
+  for i in range(1,i_max-1):
       if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==21:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==22:
@@ -166,6 +176,7 @@ def pos7(cursor_x,cursor_y,stone): #左下
           return False
       if board[cursor_y+i][cursor_x-i]==0 or board[cursor_y+i][cursor_x-i]==-1:
         return False
+  return False
   
 def pos8(cursor_x,cursor_y,stone): #右上
   cnt=0
@@ -173,7 +184,7 @@ def pos8(cursor_x,cursor_y,stone): #右上
     i_max=cursor_y
   else:
     i_max=8-cursor_x+1
-  for i in range(0,i_max-1):
+  for i in range(1,i_max-1):
     if board[cursor_y-i][cursor_x+i]==2 if stone==True else board[cursor_y-i][cursor_x+i]==1:
       cnt=cnt+1
     if board[cursor_y-i][cursor_x+i]==1 if stone==True else board[cursor_y-i][cursor_x+i]==2:
@@ -183,10 +194,17 @@ def pos8(cursor_x,cursor_y,stone): #右上
         return False
     if board[cursor_y-i][cursor_x+i]==0 or board[cursor_y-i][cursor_x+i]==-1:
       return False
+  return False
     
+def all_confirm(stone): #置ける場所があるかどうか
+  for y in range(1,9):
+    for x in range(1,9):
+      if board[y][x]==0:
+        if pos1(x,y,stone)==True or pos2(x,y,stone)==True or pos3(x,y,stone)==True or pos4(x,y,stone)==True or pos5(x,y,stone)==True or pos6(x,y,stone)==True or pos7(x,y,stone)==True or pos8(x,y,stone)==True:
+         return True
+  return False #置ける場所がない
 
-
-def my_put_stone():
+def my_put_stone(): #自分の石を置く
   global cursor_x,cursor_y,stone,mouse_c
   
   if board[cursor_y][cursor_x]==0:
@@ -197,11 +215,14 @@ def my_put_stone():
         board[cursor_y][cursor_x]=2
       draw_board()
       sound2()
-    if pos5(cursor_x,cursor_y,stone)==False:
-      pass
+      
+    else:
+      print("他の場所に置いてください")
+      #カーソルを選び直す
+      
     
 
-def com_put_stone():
+def com_put_stone(): #コンピュータの石を置く
   global c_x,c_y,stone,com_x,com_y,mouse_c
   c_x=[]
   c_y=[]
@@ -225,7 +246,7 @@ def com_put_stone():
   draw_board()
   sound2()
     
-def check_board(cursor_x,cursor_y,stone):
+def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
   if pos1(cursor_x,cursor_y,stone)==True:
     cnt=0   #左
     for x in range(cursor_x-1,0,-1):
@@ -249,21 +270,21 @@ def check_board(cursor_x,cursor_y,stone):
     for x in range(cursor_x+1,10):
       if board[cursor_y][x]==2 if stone==True else board[cursor_y][x]==1:
         cnt=cnt+1
-        if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
-          if cnt>0:
-            for i in range(cnt):
-              if stone==True:
-                board[cursor_y][cursor_x+i-1]=1
-              else:
-                board[cursor_y][cursor_x+i-1]=2
-            break
-          else:
-            break
+      if board[cursor_y][x]==1 if stone==True else board[cursor_y][x]==2:
+        if cnt>0:
+          for i in range(cnt):
+            if stone==True:
+              board[cursor_y][cursor_x+i+1]=1
+            else:
+              board[cursor_y][cursor_x+i+1]=2
+          break
+        else:
+          break
       if board[cursor_y][x]==0 or board[cursor_y][x]==-1:
         break
   
   if pos3(cursor_x,cursor_y,stone)==True:
-    cnt=0   #上
+    cnt=0   #下
     for y in range(cursor_y+1,10):
       if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
         cnt=cnt+1
@@ -271,9 +292,9 @@ def check_board(cursor_x,cursor_y,stone):
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y+i-1][cursor_x]=1
+              board[cursor_y+i+1][cursor_x]=1
             else:
-              board[cursor_y+i-1][cursor_x]=2
+              board[cursor_y+i+1][cursor_x]=2
             
           break
         else:
@@ -305,16 +326,16 @@ def check_board(cursor_x,cursor_y,stone):
       i_max=cursor_y
     else:
       i_max=cursor_x
-    for i in range(i_max-1):
+    for i in range(1,i_max-1):
       if board[cursor_y-i][cursor_x-i]==2 if stone==True else board[cursor_y-i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y-i][cursor_x-i]==1 if stone==True else board[cursor_y-i][cursor_x-i]==2:
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y-i][cursor_x-i]=1
+              board[cursor_y-i-1][cursor_x-i-1]=1
             else:
-              board[cursor_y-i][cursor_x-i]=2
+              board[cursor_y-i-1][cursor_x-i-1]=2
           break
         else:
           break
@@ -327,16 +348,16 @@ def check_board(cursor_x,cursor_y,stone):
       i_max=8-cursor_y+1
     else:
       i_max=8-cursor_x+1
-    for i in range(i_max-1):
+    for i in range(1,i_max-1):
       if board[cursor_y+i][cursor_x+i]==2 if stone==True else board[cursor_y+i][cursor_x+i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x+i]==1 if stone==True else board[cursor_y+i][cursor_x+i]==2:
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y+i][cursor_x+i]=1
+              board[cursor_y+i+1][cursor_x+i+1]=1
             else:
-              board[cursor_y+i][cursor_x+i]=2
+              board[cursor_y+i+1][cursor_x+i+1]=2
           break
         else:
           break
@@ -349,16 +370,16 @@ def check_board(cursor_x,cursor_y,stone):
       i_max=8-cursor_y+1
     else:
       i_max=cursor_x
-    for i in range(i_max-1):
+    for i in range(1,i_max-1):
       if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==1:
         cnt=cnt+1
       if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==2:
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              check[cursor_y+i][cursor_x-i]=1
+              board[cursor_y+i+1][cursor_x-i-1]=1
             else:
-              check[cursor_y+i][cursor_x-i]=2
+              board[cursor_y+i+1][cursor_x-i-1]=2
           break
         else:
           break
@@ -371,22 +392,22 @@ def check_board(cursor_x,cursor_y,stone):
       i_max=cursor_y
     else:
       i_max=8-cursor_x+1
-    for i in range(0,i_max-1):
+    for i in range(1,i_max-1):
       if board[cursor_y-i][cursor_x+i]==2 if stone==True else board[cursor_y-i][cursor_x+i]==1:
         cnt=cnt+1
       if board[cursor_y-i][cursor_x+i]==1 if stone==True else board[cursor_y-i][cursor_x+i]==2:
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y-i][cursor_x+i]=1
+              board[cursor_y-i-1][cursor_x+i-1]=1
             else:
-              board[cursor_y-i][cursor_x+i]=2
+              board[cursor_y-i-1][cursor_x+i-1]=2
           break
         else:
           break
       if board[cursor_y-i][cursor_x+i]==0 or board[cursor_y-i][cursor_x+i]==-1:
         break
-    
+     
 
 def sound1_cahru(): #開始時の音
   winsound.Beep(261,100)
@@ -468,34 +489,138 @@ def main_game():
     cvs.create_image(400,300,image=bg)
     init_board()
     draw_board()
-    if ban==1:
+    if ban==0:
       index=3
       tmr=0
-    if ban==2:
+    if ban==1:
       index=5
       tmr=0
     
-
-  elif index==3:
+  elif index==3: #先行の時の自分のターン
     stone=True
+    cvs.delete("TURN")
     cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
-    if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
-      cursor_x=int((mouse_x-185)/54.375)+1
-      cursor_y=int((mouse_y-80)/54.375)+1
-      print("a")
-      print(cursor_x,cursor_y)
-      if mouse_c==1:
-        mouse_c=0
-        print("aa")
-        print(pos1(cursor_x,cursor_y,stone))
-        my_put_stone()
-        if pos1(cursor_x,cursor_y,stone)==None and pos2(cursor_x,cursor_y,stone)==None and pos3(cursor_x,cursor_y,stone)==None and pos4(cursor_x,cursor_y,stone)==None and pos5(cursor_x,cursor_y,stone)==None and pos6(cursor_x,cursor_y,stone)==None and pos7(cursor_x,cursor_y,stone)==None and pos8(cursor_x,cursor_y,stone)==None:
-          index=3
-              
-        check_board(cursor_x,cursor_y,stone)
-        draw_board()
+    if all_confirm(stone)==False:
+        print("置ける場所がありません")
+        pas=pas+1
+        sound5()
         index=4
-        tmr=0
+       
+    if all_confirm(stone)==True:
+      if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
+        cursor_x=int((mouse_x-185)/54.375)+1
+        cursor_y=int((mouse_y-80)/54.375)+1
+        print("a")
+        print(cursor_x,cursor_y)
+        pas=0
+      
+        if mouse_c==1:
+          mouse_c=0
+          print("aa")
+          print(pos1(cursor_x,cursor_y,stone))
+          my_put_stone()
+          check_board(cursor_x,cursor_y,stone)
+          draw_board()
+          index=4
+    if pas==2:
+       index=7
+            
+        
+  elif index==4: #先行の時のコンピュータのターン
+    stone=False
+    cvs.delete("TURN")
+    cvs.create_text(400,300,text="コンピュータの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    if all_confirm(stone)==False:
+        print("置ける場所がありません")
+        pas=pas+1
+        sound5()
+        index=3
+    
+    if all_confirm(stone)==True:
+      com_put_stone()
+      check_board(com_x,com_y,stone)
+      draw_board()
+      pas=0
+      index=3
+    if pas==2:
+       index=7
+  
+  elif index==5: #後攻の時のコンピュータのターン
+    stone=True
+    cvs.delete("TURN")
+    cvs.create_text(400,300,text="コンピュータの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    if all_confirm(stone)==False:
+        print("置ける場所がありません")
+        pas=pas+1
+        sound5()
+        index=6
+    
+    if all_confirm(stone)==True:
+      com_put_stone()
+      check_board(com_x,com_y,stone)
+      draw_board()
+      pas=0
+      index=3
+    if pas==2:
+       index=7
+    
+    elif index==6: #後攻の時の自分のターン
+      stone=False
+      cvs.delete("TURN")
+      cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+      if all_confirm(stone)==False:
+          print("置ける場所がありません")
+          pas=pas+1
+          sound5()
+          index=4
+        
+      if all_confirm(stone)==True:
+        if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
+          cursor_x=int((mouse_x-185)/54.375)+1
+          cursor_y=int((mouse_y-80)/54.375)+1
+          print("a")
+          print(cursor_x,cursor_y)
+          pas=0
+        
+          if mouse_c==1:
+            mouse_c=0
+            print("aa")
+            print(pos1(cursor_x,cursor_y,stone))
+            my_put_stone()
+            check_board(cursor_x,cursor_y,stone)
+            draw_board()
+            index=4
+      if pas==2:
+        index=7
+              
+    elif index==7: #結果の表示
+      black_num=0
+      white_num=0
+      for y in range(1,9):
+        for x in range(1,9):
+          if board[y][x]==1:
+            black_num=black_num+1
+          if board[y][x]==2:
+            white_num=white_num+1
+      cvs.delete("TURN")
+      cvs.create_text(400,300,text="結果",fill="Black",font=("Times New Roman",40),tag="RESULT")
+      cvs.create_text(400,400,text="黒:"+str(black_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
+      if black_num>white_num:
+        if ban==1:
+          cvs.create_text(400,300,text="あなたの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
+          sound3_happy()
+        if ban==2:
+          cvs.create_text(400,300,text="コンピュータの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
+          sound3_destiny()   
+      if black_num<white_num:
+        if ban==1:
+          cvs.create_text(400,300,text="コンピュータの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
+          sound3_destiny()
+        if ban==2:
+          cvs.create_text(400,300,text="あなたの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
+          sound3_happy() 
+         
+        
           
           
   root.after(100,main_game)
