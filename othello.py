@@ -457,7 +457,7 @@ def sound5(): #石を置けないときの音
   winsound.Beep(261,100) 
 
 def main_game():
-  global index,stone,tmr,ban
+  global index,stone,tmr,ban,pas
   global cursor_x,cursor_y,mouse_x,mouse_y,mouse_c
   
   if index==0:
