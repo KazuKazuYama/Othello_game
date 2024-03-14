@@ -206,7 +206,7 @@ def all_confirm(stone): #置ける場所があるかどうか
 
 def my_put_stone(): #自分の石を置く
   global cursor_x,cursor_y,stone,mouse_c
-  
+    
   if board[cursor_y][cursor_x]==0:
     if pos1(cursor_x,cursor_y,stone)==True or pos2(cursor_x,cursor_y,stone)==True or pos3(cursor_x,cursor_y,stone)==True or pos4(cursor_x,cursor_y,stone)==True or pos5(cursor_x,cursor_y,stone)==True or pos6(cursor_x,cursor_y,stone)==True or pos7(cursor_x,cursor_y,stone)==True or pos8(cursor_x,cursor_y,stone)==True:
       if stone==True:
@@ -216,11 +216,9 @@ def my_put_stone(): #自分の石を置く
       draw_board()
       sound2()
       
-    else:
-      print("他の場所に置いてください")
-      #カーソルを選び直す
+    else:# 空白に置けない場合
       return False
-      
+  #pos,checkのところでおいている石も 
     
 
 def com_put_stone(): #コンピュータの石を置く
@@ -246,7 +244,7 @@ def com_put_stone(): #コンピュータの石を置く
   draw_board()
   sound2()
     
-def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
+def check_board(cursor_x,cursor_y,stone):#石を置いたときの処理
   if pos1(cursor_x,cursor_y,stone)==True:
     cnt=0   #左
     for x in range(cursor_x-1,0,-1):
@@ -303,7 +301,7 @@ def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
         break
   
   if pos4(cursor_x,cursor_y,stone)==True:
-    cnt=0   #下
+    cnt=0   #上
     for y in range(cursor_y-1,0,-1):
       if board[y][cursor_x]==2 if stone==True else board[y][cursor_x]==1:
         cnt=cnt+1
@@ -492,10 +490,10 @@ def main_game():
     print(ban)
     if ban==0:
       index=3
-      tmr=0
+     
     if ban==1:
       index=5
-      tmr=0
+    
     
   elif index==3: #先行の時の自分のターン
     stone=True
@@ -508,7 +506,6 @@ def main_game():
         index=4
        
     if all_confirm(stone)==True:
-      print("先行")
       if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
         cursor_x=int((mouse_x-185)/54.375)+1
         cursor_y=int((mouse_y-80)/54.375)+1
@@ -518,6 +515,7 @@ def main_game():
           mouse_c=0
           my_put_stone()
           if my_put_stone()==False:
+            print("a")
             index=3
           else:
             check_board(cursor_x,cursor_y,stone)
