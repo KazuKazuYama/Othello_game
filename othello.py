@@ -5,6 +5,7 @@ import winsound
 KURO=1
 SIRO=2
 index=0
+pas=0
 
 cursor_x=0
 cursor_y=0
@@ -12,7 +13,6 @@ mouse_x=0
 mouse_y=0
 mouse_c=0
 stone=True #True:黒 False:白
-banstr=["あなた","コンピュータ"]
 
 def mouse_move(e):
   global mouse_x,mouse_y
@@ -222,7 +222,7 @@ def my_put_stone(): #自分の石を置く
     
 
 def com_put_stone(): #コンピュータの石を置く
-  global c_x,c_y,stone,com_x,com_y,mouse_c
+  global c_x,c_y,stone,com_x,com_y
   c_x=[]
   c_y=[]
 
@@ -236,9 +236,9 @@ def com_put_stone(): #コンピュータの石を置く
   com_x=c_x[i]
   com_y=c_y[i]
   if stone==True:
-    board[com_y][com_x]=2
-  else:
     board[com_y][com_x]=1
+  else:
+    board[com_y][com_x]=2
   check_board(com_x,com_y,stone)
   draw_board()
   sound2()
@@ -472,12 +472,12 @@ def main_game():
     if mouse_c==1 and 150<mouse_x and mouse_x<250 and 250<mouse_y and mouse_y<350:
       mouse_c=0
       index=2
-      ban=1
+      ban=0
        #先攻
-    if mouse_c==1 and 550<mouse_x and mouse_x<650 and 250<mouse_y and mouse_y<350:
+    if mouse_c==1 and 480<mouse_x and mouse_x<730 and 242<mouse_y and mouse_y<329:
       mouse_c=0
       index=2
-      ban=2
+      ban=1
        #後攻
       
     
@@ -486,6 +486,7 @@ def main_game():
     cvs.create_image(400,300,image=bg)
     init_board()
     draw_board()
+    print(ban)
     if ban==0:
       index=3
       tmr=0
@@ -504,17 +505,14 @@ def main_game():
         index=4
        
     if all_confirm(stone)==True:
+      print("先行")
       if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
         cursor_x=int((mouse_x-185)/54.375)+1
         cursor_y=int((mouse_y-80)/54.375)+1
-        print("a")
-        print(cursor_x,cursor_y)
         pas=0
       
         if mouse_c==1:
           mouse_c=0
-          print("aa")
-          print(pos1(cursor_x,cursor_y,stone))
           my_put_stone()
           check_board(cursor_x,cursor_y,stone)
           draw_board()
@@ -557,66 +555,65 @@ def main_game():
       check_board(com_x,com_y,stone)
       draw_board()
       pas=0
-      index=3
+      index=6
     if pas==2:
-       index=7
+      index=7
     
-    elif index==6: #後攻の時の自分のターン
-      stone=False
-      cvs.delete("TURN")
-      cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
-      if all_confirm(stone)==False:
-          print("置ける場所がありません")
-          pas=pas+1
-          sound5()
-          index=4
+  elif index==6: #後攻の時の自分のターン
+    stone=False
+    cvs.delete("TURN")
+    cvs.create_text(400,300,text="あなたの番です",fill="Black",font=("Times New Roman",40),tag="TURN")
+    if all_confirm(stone)==False:
+        print("置ける場所がありません")
+        pas=pas+1
+        sound5()
+        index=5
+      
+    if all_confirm(stone)==True:
+      if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
+        cursor_x=int((mouse_x-185)/54.375)+1
+        cursor_y=int((mouse_y-80)/54.375)+1
+        print(cursor_x,cursor_y)
+        pas=0
         
-      if all_confirm(stone)==True:
-        if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
-          cursor_x=int((mouse_x-185)/54.375)+1
-          cursor_y=int((mouse_y-80)/54.375)+1
-          print("a")
-          print(cursor_x,cursor_y)
-          pas=0
+        if mouse_c==1:
+          mouse_c=0
+          print("aa")
+          print(pos1(cursor_x,cursor_y,stone))
+          my_put_stone()
+          check_board(cursor_x,cursor_y,stone)
+          draw_board()
+          index=5
+    if pas==2:
+      index=7
+            
+  elif index==7: #結果の表示
+    black_num=0
+    white_num=0
+    for y in range(1,9):
+      for x in range(1,9):
+        if board[y][x]==1:
+          black_num=black_num+1
+        if board[y][x]==2:
+          white_num=white_num+1
+    cvs.delete("TURN")
+    cvs.create_text(400,300,text="結果",fill="Black",font=("Times New Roman",40),tag="RESULT")
+    cvs.create_text(400,400,text="黒:"+str(black_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
+    if black_num>white_num:
+      if ban==0:
+        cvs.create_text(400,300,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
+        sound3_happy()
+      if ban==1:
+        cvs.create_text(400,300,text="あなたの負けです",fill="Blue",font=("Times New Roman",40),tag="RESULT")
+        sound3_destiny()   
+    if black_num<white_num:
+      if ban==0:
+        cvs.create_text(400,300,text="あなたの負けです",fill="Blue",font=("Times New Roman",40),tag="RESULT")
+        sound3_destiny()
+      if ban==1:
+        cvs.create_text(400,300,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
+        sound3_happy() 
         
-          if mouse_c==1:
-            mouse_c=0
-            print("aa")
-            print(pos1(cursor_x,cursor_y,stone))
-            my_put_stone()
-            check_board(cursor_x,cursor_y,stone)
-            draw_board()
-            index=4
-      if pas==2:
-        index=7
-              
-    elif index==7: #結果の表示
-      black_num=0
-      white_num=0
-      for y in range(1,9):
-        for x in range(1,9):
-          if board[y][x]==1:
-            black_num=black_num+1
-          if board[y][x]==2:
-            white_num=white_num+1
-      cvs.delete("TURN")
-      cvs.create_text(400,300,text="結果",fill="Black",font=("Times New Roman",40),tag="RESULT")
-      cvs.create_text(400,400,text="黒:"+str(black_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
-      if black_num>white_num:
-        if ban==1:
-          cvs.create_text(400,300,text="あなたの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
-          sound3_happy()
-        if ban==2:
-          cvs.create_text(400,300,text="コンピュータの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
-          sound3_destiny()   
-      if black_num<white_num:
-        if ban==1:
-          cvs.create_text(400,300,text="コンピュータの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
-          sound3_destiny()
-        if ban==2:
-          cvs.create_text(400,300,text="あなたの勝ちです",fill="Black",font=("Times New Roman",40),tag="RESULT")
-          sound3_happy() 
-         
         
           
           
