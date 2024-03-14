@@ -11,7 +11,6 @@ cursor_y=0
 mouse_x=0
 mouse_y=0
 mouse_c=0
-pas=0
 stone=True #True:黒 False:白
 banstr=["あなた","コンピュータ"]
 
@@ -167,9 +166,9 @@ def pos7(cursor_x,cursor_y,stone): #左下
   else:
     i_max=cursor_x
   for i in range(1,i_max-1):
-      if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==21:
+      if board[cursor_y+i][cursor_x-i]==2 if stone==True else board[cursor_y+i][cursor_x-i]==1:
         cnt=cnt+1
-      if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==22:
+      if board[cursor_y+i][cursor_x-i]==1 if stone==True else board[cursor_y+i][cursor_x-i]==2:
         if cnt>0:
           return True
         else:
@@ -232,8 +231,6 @@ def com_put_stone(): #コンピュータの石を置く
       if pos1(x,y,stone)==True or pos2(x,y,stone)==True or pos3(x,y,stone)==True or pos4(x,y,stone)==True or pos5(x,y,stone)==True or pos6(x,y,stone)==True or pos7(x,y,stone)==True or pos8(x,y,stone)==True:
         c_x.append(x)
         c_y.append(y)
-      if pos1(x,y,stone)==False and pos2(x,y,stone)==False and pos3(x,y,stone)==False and pos4(x,y,stone)==False and pos5(x,y,stone)==False and pos6(x,y,stone)==False and pos7(x,y,stone)==False and pos8(x,y,stone)==False:
-        pass
       
   i=random.randint(0,len(c_x)-1)
   com_x=c_x[i]
@@ -399,9 +396,9 @@ def check_board(cursor_x,cursor_y,stone): #石を置いたときの処理
         if cnt>0:
           for i in range(cnt):
             if stone==True:
-              board[cursor_y-i-1][cursor_x+i-1]=1
+              board[cursor_y-i-1][cursor_x+i+1]=1
             else:
-              board[cursor_y-i-1][cursor_x+i-1]=2
+              board[cursor_y-i-1][cursor_x+i+1]=2
           break
         else:
           break
