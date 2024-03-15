@@ -582,7 +582,7 @@ def main_game():
     stone=False
     cvs.delete("TURN")
     cvs.create_text(720,160,text="あなた",fill="Black",font=("Times New Roman",30),tag="TURN")
-    cvs.create_text(720.230,text="白",fill="Black",font=("Times New Roman",30),tag="TURN")
+    cvs.create_text(720,230,text="白",fill="Black",font=("Times New Roman",20),tag="TURN")
     if all_confirm(stone)==False:
         pas=pas+1
         sound5()
@@ -596,7 +596,7 @@ def main_game():
         print(cursor_x,cursor_y)
         pas=0
         
-        if mouse_c==1:
+        if mouse_c==1 and board[cursor_y][cursor_x]==0:
           mouse_c=0
           print("aa")
           print(pos1(cursor_x,cursor_y,stone))
