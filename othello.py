@@ -6,6 +6,7 @@ KURO=1
 SIRO=2
 index=0
 pas=0
+tmr=0
 
 cursor_x=0
 cursor_y=0
@@ -455,28 +456,33 @@ def sound5(): #石を置けないときの音
   winsound.Beep(261,100) 
 
 def main_game():
-  global index,stone,tmr,ban,pas
+  global index,stone,tmr,ban,pas,tmr
   global cursor_x,cursor_y,mouse_x,mouse_y,mouse_c
   
   if index==0:
-    cvs.create_text(400,300,text="オセロ対戦",fill="Black",font=("Times New Roman",70),tag="TITLE")
-    cvs.create_text(400,500,text="対局する",fill="Black",font=("Times New Roman",40),tag="TITLE")
-    if mouse_c==1 and 300<mouse_x and mouse_x<500 and 450<mouse_y and mouse_y<550:
+    cvs.create_image(400,300,image=bg2,tags="TITLE")
+    cvs.create_text(400,250,text="オセロ対戦",fill="Black",font=("Times New Roman",70),tag="TITLE")
+    cvs.create_text(400,400,text="対局する",fill="Black",font=("Times New Roman",40),tag="TITLE")
+    if mouse_c==1 and 280<mouse_x and mouse_x<500 and 370<mouse_y and mouse_y<430:
+      sound2()
       mouse_c=0
       index=1
       
   
   elif index==1:
     cvs.delete("TITLE")
-    cvs.create_text(200,300,text="先行(黒)",fill="Black",font=("Times New Roman",40),tag="SELECT")
-    cvs.create_text(600,300,text="後攻(白)",fill="Black",font=("Times New Roman",40),tag="SELECT")
-    if mouse_c==1 and 150<mouse_x and mouse_x<250 and 250<mouse_y and mouse_y<350:
+    cvs.create_image(400,300,image=bg2,tags="SELECT")
+    cvs.create_text(250,300,text="先行(黒)",fill="Black",font=("Times New Roman",40),tag="SELECT")
+    cvs.create_text(550,300,text="後攻(白)",fill="Black",font=("Times New Roman",40),tag="SELECT")
+    if mouse_c==1 and 150<mouse_x and mouse_x<350 and 250<mouse_y and mouse_y<350:
       mouse_c=0
+      sound2()
       index=2
       ban=0
        #先攻
-    if mouse_c==1 and 480<mouse_x and mouse_x<730 and 242<mouse_y and mouse_y<329:
+    if mouse_c==1 and 450<mouse_x and mouse_x<650 and 250<mouse_y and mouse_y<350:
       mouse_c=0
+      sound2()
       index=2
       ban=1
        #後攻
@@ -484,7 +490,7 @@ def main_game():
     
   elif index==2:
     cvs.delete("SELECT")
-    cvs.create_image(400,300,image=bg)
+    cvs.create_image(400,300,image=bg,tags="BG")
     init_board()
     draw_board()
     print(ban)
@@ -498,12 +504,15 @@ def main_game():
   elif index==3: #先行の時の自分のターン
     stone=True
     cvs.delete("TURN")
+    cvs.create_text(400,570,text="＊コマを選択するとパスします",fill="Black",font=("Times New Roman",20),tag="TURN")
     cvs.create_text(720,160,text="あなた",fill="Black",font=("Times New Roman",30),tag="TURN")
+    cvs.create_text(720,230,text="黒",fill="Black",font=("Times New Roman",20),tag="TURN")
     if all_confirm(stone)==False:
         print("置ける場所がありません")
         pas=pas+1
         sound5()
         index=4
+        tmr=0
        
     if all_confirm(stone)==True:
       if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
@@ -521,57 +530,66 @@ def main_game():
             check_board(cursor_x,cursor_y,stone)
             draw_board()
             index=4
+            tmr=0
     if pas==2:
        index=7
             
         
   elif index==4: #先行の時のコンピュータのターン
     stone=False
+    tmr=tmr+1
     cvs.delete("TURN")
     cvs.create_text(720,160,text="CP",fill="Black",font=("Times New Roman",30),tag="TURN")
-    if all_confirm(stone)==False:
-        print("置ける場所がありません")
-        pas=pas+1
-        sound5()
+    if tmr==10:
+      if all_confirm(stone)==False:
+          cvs.delete("TURN")
+          cvs.create_text(720,160,text="パス",fill="Black",font=("Times New Roman",30),tag="TURN")
+          pas=pas+1
+          sound5()
+          index=3
+      
+      if all_confirm(stone)==True:
+        com_put_stone()
+        check_board(com_x,com_y,stone)
+        draw_board()
+        pas=0
         index=3
-    
-    if all_confirm(stone)==True:
-      com_put_stone()
-      check_board(com_x,com_y,stone)
-      draw_board()
-      pas=0
-      index=3
-    if pas==2:
-       index=7
+      if pas==2:
+        index=7
   
   elif index==5: #後攻の時のコンピュータのターン
     stone=True
+    tmr=tmr+1
     cvs.delete("TURN")
     cvs.create_text(720,160,text="CP",fill="Black",font=("Times New Roman",30),tag="TURN")
-    if all_confirm(stone)==False:
-        print("置ける場所がありません")
-        pas=pas+1
-        sound5()
+    if tmr==10:
+      if all_confirm(stone)==False:
+            cvs.delete("TURN")
+            cvs.create_text(720,160,text="パス",fill="Black",font=("Times New Roman",30),tag="TURN")
+            pas=pas+1
+            sound5()
+            index=6
+      
+      if all_confirm(stone)==True:
+        com_put_stone()
+        check_board(com_x,com_y,stone)
+        draw_board()
+        pas=0
         index=6
-    
-    if all_confirm(stone)==True:
-      com_put_stone()
-      check_board(com_x,com_y,stone)
-      draw_board()
-      pas=0
-      index=6
-    if pas==2:
-      index=7
+      if pas==2:
+        index=7
     
   elif index==6: #後攻の時の自分のターン
     stone=False
     cvs.delete("TURN")
+    cvs.create_text(400,570,text="＊コマを選択するとパスします",fill="Black",font=("Times New Roman",20),tag="TURN")
     cvs.create_text(720,160,text="あなた",fill="Black",font=("Times New Roman",30),tag="TURN")
+    cvs.create_text(720.230,text="白",fill="Black",font=("Times New Roman",30),tag="TURN")
     if all_confirm(stone)==False:
-        print("置ける場所がありません")
         pas=pas+1
         sound5()
         index=5
+        tmr=0
       
     if all_confirm(stone)==True:
       if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
@@ -591,6 +609,7 @@ def main_game():
             check_board(cursor_x,cursor_y,stone)
             draw_board()
             index=5
+            tmr=0
           
     if pas==2:
       index=7
@@ -604,9 +623,12 @@ def main_game():
           black_num=black_num+1
         if board[y][x]==2:
           white_num=white_num+1
+    cvs.delete("STONE")
+    cvs.delete("BG")
     cvs.delete("TURN")
-    cvs.create_text(400,300,text="結果",fill="Black",font=("Times New Roman",40),tag="RESULT")
-    cvs.create_text(400,400,text="黒:"+str(black_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
+    cvs.create_text(400,500,text="もう一度対局する",fill="Black",font=("Times New Roman",30),tag="RESULT")
+    cvs.create_text(300,300,text="黒:"+str(black_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
+    cvs.create_text(500,300,text="白:"+str(white_num),fill="Black",font=("Times New Roman",40),tag="RESULT")
     if black_num>white_num:
       if ban==0:
         cvs.create_text(400,100,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
@@ -621,8 +643,17 @@ def main_game():
       if ban==1:
         cvs.create_text(400,100,text="あなたの勝ちです",fill="Red",font=("Times New Roman",40),tag="RESULT")
         sound3_happy() 
-        
-        
+    if black_num==white_num:
+      cvs.create_text(400,100,text="引き分けです",fill="Black",font=("Times New Roman",40),tag="RESULT")
+      sound3_destiny()    
+    if mouse_c==1 and 250<mouse_x and mouse_x<450 and 450<mouse_y and mouse_y<550:
+      sound2()
+      mouse_c=0
+      index=0
+      pas=0
+      tmr=0
+      cvs.delete("RESULT")
+         
           
           
   root.after(100,main_game)
@@ -633,7 +664,8 @@ root.resizable(False,False)
 root.bind("<Motion>",mouse_move)
 root.bind("<ButtonPress>",mouse_press)
 bg=tk.PhotoImage(file="board.png")
-cvs=tk.Canvas(width=800,height=600)
+happy=tk.PhotoImage(file="R.png")
+cvs=tk.Canvas(width=800,height=600,background="lightgreen")
 cvs.pack()
 
 main_game()
