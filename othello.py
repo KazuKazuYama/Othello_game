@@ -1,7 +1,6 @@
 import tkinter as tk
 import random
 import winsound
-from PIL import Image, ImageTk
 
 KURO=1
 SIRO=2
