@@ -493,7 +493,6 @@ def main_game():
     cvs.create_image(400,300,image=bg,tags="BG")
     init_board()
     draw_board()
-    print(ban)
     if ban==0:
       index=3
      
@@ -507,7 +506,6 @@ def main_game():
     cvs.create_text(720,160,text="あなた",fill="Black",font=("Times New Roman",30),tag="TURN")
     cvs.create_text(720,230,text="黒",fill="Black",font=("Times New Roman",20),tag="TURN")
     if all_confirm(stone)==False:
-        print("置ける場所がありません")
         pas=pas+1
         sound5()
         index=4
@@ -523,7 +521,6 @@ def main_game():
           mouse_c=0
           my_put_stone()
           if my_put_stone()==False:
-            print("a")
             index=3
           else:
             check_board(cursor_x,cursor_y,stone)
@@ -593,13 +590,10 @@ def main_game():
       if mouse_x>185 and mouse_x<615 and mouse_y>80 and mouse_y<530:
         cursor_x=int((mouse_x-185)/54.375)+1
         cursor_y=int((mouse_y-80)/54.375)+1
-        print(cursor_x,cursor_y)
         pas=0
         
         if mouse_c==1 and board[cursor_y][cursor_x]==0:
           mouse_c=0
-          print("aa")
-          print(pos1(cursor_x,cursor_y,stone))
           my_put_stone()
           if my_put_stone()==False:
             index=6
