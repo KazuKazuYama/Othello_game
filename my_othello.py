@@ -2,7 +2,7 @@ import tkinter as tk
 import random
 import winsound
 
-a=0
+a=2
 KURO=1
 SIRO=2
 index=0
